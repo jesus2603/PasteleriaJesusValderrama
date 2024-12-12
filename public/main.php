@@ -20,6 +20,42 @@ echo "<!DOCTYPE html>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Bienvenido a la Pastelería</title>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <style>
+        body {
+            background-color: #fef4f1;
+        }
+        .header {
+            background-color: #f6b8b8;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-family: 'Arial', sans-serif;
+            color: #4b4b4b;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .btn-logout {
+            background-color: #f7a4a4;
+            color: white;
+        }
+        .btn-logout:hover {
+            background-color: #f67979;
+        }
+        .table th {
+            background-color: #f4c2c2;
+            color: #4b4b4b;
+        }
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #f9e6e6;
+        }
+        .table td, .table th {
+            text-align: center;
+        }
+        .text-muted {
+            color: #d1c9c9;
+        }
+    </style>
 </head>
 <body>
 <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
@@ -31,7 +67,7 @@ echo "<!DOCTYPE html>
         <div class='collapse navbar-collapse' id='navbarNav'>
             <ul class='navbar-nav ms-auto'>
                 <li class='nav-item'>
-                    <a class='nav-link' href='logout.php'>Cerrar sesión</a>
+                    <a class='nav-link btn-logout' href='logout.php'>Cerrar sesión</a>
                 </li>
             </ul>
         </div>
@@ -39,7 +75,7 @@ echo "<!DOCTYPE html>
 </nav>
 
 <div class='container mt-4'>
-    <h1 class='text-center mb-4'>¡Bienvenido, {$_SESSION['nombre']}!</h1>
+    <h1 class='text-center mb-4 header'>¡Bienvenido, {$_SESSION['nombre']}!</h1>
     <p class='text-center'>Explora nuestra deliciosa selección de pasteles.</p>
 
     <div class='row'>";
@@ -54,7 +90,7 @@ echo "<!DOCTYPE html>
             echo "
             <div class='col-md-4 mb-4'>
                 <div class='card'>
-                    <img src='placeholder.jpg' class='card-img-top' alt='{$pastel['nombre']}' style='height: 200px; object-fit: cover;'>
+
                     <div class='card-body'>
                         <h5 class='card-title'>{$pastel['nombre']}</h5>
                         <p class='card-text'>Precio: {$pastel['precio']}€</p>

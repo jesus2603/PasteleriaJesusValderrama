@@ -57,17 +57,17 @@ if (!isset($_SESSION['usuario'])) {
     <div class="container mt-5">
         <!-- Header -->
         <div class="header text-center">
-            <h1><?php echo(`Bienvenido`) ?></h1>
+            <h1><?php echo (`Bienvenido`) ?></h1>
             <div class="text-end">
                 <a href="logout.php" class="btn btn-logout">Cerrar sesión</a>
             </div>
         </div>
 
-        
+
 
         <!-- Agregar Dulce -->
         <h2 class="mt-4 text-center text-secondary">Agregar un Dulce</h2>
-        <form action="admin_panel.php" method="POST" class="mb-4">
+        <form action="mainAdmin.php" method="POST" class="mb-4">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre del Dulce</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -80,99 +80,114 @@ if (!isset($_SESSION['usuario'])) {
         </form>
 
         <?php
-        // Conexión a la base de datos
-        $conexion = Conexion::obtenerInstancia()->obtenerConexion();
+// Conexión a la base de datos
+$conexion = Conexion::obtenerInstancia()->obtenerConexion();
 
-        // Agregar un dulce
-        if (isset($_POST['agregar'])) {
-            $nombre = $_POST['nombre'];
-            $precio = $_POST['precio'];
-            $stmt = $conexion->prepare("INSERT INTO dulces (nombre, precio) VALUES (:nombre, :precio)");
-            $stmt->execute([':nombre' => $nombre, ':precio' => $precio]);
-            echo "<p class='text-success'>Dulce agregado correctamente.</p>";
-        }
+// Agregar un dulce
+if (isset($_POST['agregar'])) {
+    $nombre = $_POST['nombre'];
+    $precio = $_POST['precio'];
+    $stmt = $conexion->prepare("INSERT INTO dulces (nombre, precio) VALUES (:nombre, :precio)");
+    $stmt->execute([':nombre' => $nombre, ':precio' => $precio]);
+    echo "<p class='text-success'>Dulce agregado correctamente.</p>";
+}
 
-        // Eliminar un dulce
-        if (isset($_GET['eliminar'])) {
-            $id = $_GET['eliminar'];
-            $stmt = $conexion->prepare("DELETE FROM dulces WHERE id = :id");
-            $stmt->execute([':id' => $id]);
-            echo "<p class='text-danger'>Dulce eliminado correctamente.</p>";
-        }
+// Eliminar un dulce
+if (isset($_GET['eliminar'])) {
+    $id = $_GET['eliminar'];
+    $stmt = $conexion->prepare("DELETE FROM dulces WHERE id = :id");
+    $stmt->execute([':id' => $id]);
+    echo "<p class='text-danger'>Dulce eliminado correctamente.</p>";
+}
 
-        // Editar precio de un dulce
-        if (isset($_POST['editar'])) {
-            $id = $_POST['id'];
-            $nuevoPrecio = $_POST['nuevo_precio'];
-            $stmt = $conexion->prepare("UPDATE dulces SET precio = :precio WHERE id = :id");
-            $stmt->execute([':precio' => $nuevoPrecio, ':id' => $id]);
-            echo "<p class='text-success'>Precio actualizado correctamente.</p>";
-        }
+// Editar precio de un dulce
+if (isset($_POST['editar'])) {
+    $id = $_POST['id'];
+    $nuevoPrecio = $_POST['nuevo_precio'];
+    $stmt = $conexion->prepare("UPDATE dulces SET precio = :precio WHERE id = :id");
+    $stmt->execute([':precio' => $nuevoPrecio, ':id' => $id]);
+    echo "<p class='text-success'>Precio actualizado correctamente.</p>";
+}
 
-        // Listar Dulces
-        $stmtDulces = $conexion->query("SELECT id, nombre, precio FROM dulces");
-        $dulces = $stmtDulces->fetchAll(PDO::FETCH_ASSOC);
+// Listar Dulces
+$stmtDulces = $conexion->query("SELECT id, nombre, precio FROM dulces");
+$dulces = $stmtDulces->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($dulces) {
-            echo '<h2 class="mt-4 text-center text-secondary">Listado de Dulces</h2>';
-            echo '<table class="table table-striped">';
-            echo '<thead><tr><th>Nombre</th><th>Precio</th><th>Acciones</th></tr></thead><tbody>';
-            foreach ($dulces as $dulce) {
-                echo "<tr><td>" . htmlspecialchars($dulce['nombre']) . "</td><td>" . number_format($dulce['precio'], 2) . " €</td>";
-                echo "<td>
+if ($dulces) {
+    echo '<h2 class="mt-4 text-center text-secondary">Listado de Dulces</h2>';
+    echo '<table class="table table-striped">';
+    echo '<thead><tr><th>Nombre</th><th>Precio</th><th>Acciones</th></tr></thead><tbody>';
+    foreach ($dulces as $dulce) {
+        echo "<tr><td>" . htmlspecialchars($dulce['nombre']) . "</td><td>" . number_format($dulce['precio'], 2) . " €</td>";
+        echo "<td>
                     <a href='#' class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editarModal' data-id='" . $dulce['id'] . "' data-precio='" . $dulce['precio'] . "'>Editar Precio</a>
                     <a href='?eliminar=" . $dulce['id'] . "' class='btn btn-danger btn-sm'>Eliminar</a>
                 </td></tr>";
-            }
-            echo '</tbody></table>';
-        } else {
-            echo '<p class="text-muted">No hay dulces registrados.</p>';
-        }
-        ?>
+    }
+    echo '</tbody></table>';
+} else {
+    echo '<p class="text-muted">No hay dulces registrados.</p>';
+}
 
-        <!-- Modal para Editar Precio -->
-        <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="admin_panel.php" method="POST">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editarModalLabel">Editar Precio</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" id="id" name="id">
-                            <div class="mb-3">
-                                <label for="nuevo_precio" class="form-label">Nuevo Precio</label>
-                                <input type="number" class="form-control" id="nuevo_precio" name="nuevo_precio" step="0.01" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" name="editar" class="btn btn-primary">Guardar cambios</button>
-                        </div>
-                    </form>
+// Listar Usuarios (Acceso a los usuarios que se meten en la página)
+$stmtUsuarios = $conexion->query("SELECT id, usuario, password FROM usuarios"); // Suponiendo que tienes una tabla 'usuarios'
+$usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
+
+if ($usuarios) {
+    echo '<h2 class="mt-4 text-center text-secondary">Listado de Usuarios</h2>';
+    echo '<table class="table table-striped">';
+    echo '<thead><tr><th>Usuario</th><th>ID</th><th>Contraseña</th></tr></thead><tbody>';
+    foreach ($usuarios as $usuario) {
+        echo "<tr><td>" . htmlspecialchars($usuario['usuario']) . "</td>
+                  <td>" . htmlspecialchars($usuario['id']) . "</td></tr>";
+    }
+    echo '</tbody></table>';
+} else {
+    echo '<p class="text-muted">No hay usuarios registrados.</p>';
+}
+?>
+
+<!-- Modal para Editar Precio -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="mainAdmin.php" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Precio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id" name="id">
+                    <div class="mb-3">
+                        <label for="nuevo_precio" class="form-label">Nuevo Precio</label>
+                        <input type="number" class="form-control" id="nuevo_precio" name="nuevo_precio" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" name="editar" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
         </div>
-
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Llenar el formulario del modal con los datos del dulce a editar
-        const editarModal = document.getElementById('editarModal');
-        editarModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const id = button.getAttribute('data-id');
-            const precio = button.getAttribute('data-precio');
-            const modalTitle = editarModal.querySelector('.modal-title');
-            const idInput = editarModal.querySelector('#id');
-            const precioInput = editarModal.querySelector('#nuevo_precio');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Llenar el formulario del modal con los datos del dulce a editar
+    const editarModal = document.getElementById('editarModal');
+    editarModal.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget;
+        let id = button.getAttribute('data-id');
+        let precio = button.getAttribute('data-precio');
+        let modalTitle = editarModal.querySelector('.modal-title');
+        let idInput = editarModal.querySelector('#id');
+        let precioInput = editarModal.querySelector('#nuevo_precio');
 
-            modalTitle.textContent = 'Editar Precio del Dulce';
-            idInput.value = id;
-            precioInput.value = precio;
-        });
-    </script>
+        modalTitle.textContent = 'Editar Precio del Dulce';
+        idInput.value = id;
+        precioInput.value = precio;
+    });
+</script>
 </body>
 </html>
