@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['nombre'] = $usuario;  // Puedes modificar esto según cómo guardes el nombre
 
         // Redirigir según el tipo de usuario
-        if ($usuario === 'admin') {
+        if ($username == 'admin') {
             header('Location: mainAdmin.php');
             exit;
         } else {

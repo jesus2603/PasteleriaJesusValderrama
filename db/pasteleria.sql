@@ -6,8 +6,8 @@ USE pasteleria;
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL-- ,
-    -- isadmin TINYINT NOT NULL default=0;
+    password VARCHAR(255) NOT NULL,
+    isadmin TINYINT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE dulces (

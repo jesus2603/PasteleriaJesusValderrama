@@ -3,7 +3,7 @@ session_start();
 include_once '../src/conexion.php';
 require_once '../src/Cliente.php';
 
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario'] !== 'admin') {
+if (!isset($_SESSION['usuario'])) {
     header('Location: index.php');
     exit;
 }
@@ -57,7 +57,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario'] !== 'admin') {
     <div class="container mt-5">
         <!-- Header -->
         <div class="header text-center">
-            <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></h1>
+            <h1><?php echo(`Bienvenido`) ?></h1>
             <div class="text-end">
                 <a href="logout.php" class="btn btn-logout">Cerrar sesión</a>
             </div>

@@ -4,7 +4,13 @@ session_start();
 if (!isset($_SESSION['usuario'])) {
     header('Location: index.php');
     exit;
+}else{
+   if( $_SESSION['usuario']=="admin"){
+    header('Location: mainAdmin.php');
+    exit;
 }
+}
+
 
 // Mensaje de bienvenida
 echo "<!DOCTYPE html>
