@@ -20,11 +20,16 @@
                         <label for="password" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                </form>
+                   
+                     <button type="submit" class="btn btn-primary w-100">Entrar</button>
+               <p>¿No tienes una cuenta?</p>
+    <a href="signin.php" class="btn btn-primary">Regístrate</a>
+                    </form>
                 
             </div>
         </div>
     </div>
+    
+</div>
 </body>
 </html>
