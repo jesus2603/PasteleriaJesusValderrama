@@ -23,7 +23,7 @@ if ($isOkay) {
     } else {
         header('Location: main.php');
         exit;
-    }
+    } 
 }
 ?>
 <!DOCTYPE html>

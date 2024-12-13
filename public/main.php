@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario'])) {
 // Inicializa el carrito si no existe
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
-}
+}  
 
 // Función para añadir productos al carrito
 function agregarAlCarrito($nombre, $precio) {
