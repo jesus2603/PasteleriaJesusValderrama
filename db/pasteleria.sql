@@ -10,6 +10,7 @@ CREATE TABLE usuarios (
     isadmin TINYINT NOT NULL DEFAULT 0
 );
 
+
 CREATE TABLE dulces (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
